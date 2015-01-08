@@ -1,0 +1,9 @@
+apply plugin: 'plugin-base-ullink'
+
+buildscript {
+    dependencies {
+        classpath group: 'com.ullink.gradle', name: 'gradle-plugins', version: '1.0-SNAPSHOT'
+    }
+}
+
+version = '1.0'
