@@ -1,10 +1,7 @@
 package com.ullink.gradle
 
-import org.apache.maven.model.Dependency
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.DependencyArtifact
-import org.gradle.api.artifacts.ModuleDependency
 
 // Extracted from Peter Niederwieser work in spockframework:
 // https://github.com/spockframework/spock/blob/4916ace3cbb853193c65db312214dbdf66ce62ae/gradle/publishMaven.gradle
@@ -32,27 +29,28 @@ class OptionalPlugin implements Plugin<Project> {
                 pom.dependencies.removeAll { it.scope == "test" }
             }
         }
-        project.afterEvaluate { p ->
+
+        project.afterEvaluate {
             def deployers = []
 
-            p.install {
-                deployers << project.repositories.mavenInstaller
+            project.install {
+                deployers << repositories.mavenInstaller
             }
 
             deployers*.pom.each {
-                it.whenConfigured(p.patchPom)
+                it.whenConfigured(project.patchPom)
             }
         }
     }
 
-    boolean matches(Dependency mvn, ModuleDependency dep) {
+    boolean matches(/*org.apache.maven.model.Dependency*/ mvn, org.gradle.api.artifacts.ModuleDependency dep) {
         if (mvn.groupId != dep.group) {
             return false
         }
         if (dep.artifacts.isEmpty()) {
             return mvn.artifactId == dep.name
         }
-        for (DependencyArtifact art in dep.artifacts) {
+        for (org.gradle.api.artifacts.DependencyArtifact art in dep.artifacts) {
             if (mvn.artifactId == art.name) {
                 return true
             }
