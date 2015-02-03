@@ -8,7 +8,7 @@ apply plugin: 'nu.studer.plugindev'
 
 group = 'com.ullink.gradle'
 version = '1.0'
-description 'gradle-opencover-plugin is a Gradle plugin for getting code coverage using OpenCover'
+description 'gradle-tools-plugin is a set of plugins that provide useful addition to Gradle'
 
 dependencies {
     compile gradleApi()
@@ -25,7 +25,7 @@ bintray {
 }
 
 plugindev {
-    pluginName 'com.ullink.gradle:gradle-functions-plugin'
+    pluginName 'com.ullink.gradle:gradle-tools-plugin'
     pluginDescription project.description
     pluginLicenses 'Apache-2.0'
     pluginTags 'gradle', 'plugin', 'tools'
