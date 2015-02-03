@@ -22,6 +22,5 @@ class FunctionsPlugin implements Plugin<Project> {
         /* void */ project.ext.replaceAssemblyAttribute = { def file, String name, String value ->
             project.ant.replaceregexp(file: project.file(file), match: /^\[assembly: / + name + /\(".*"\)\]$/, replace: '[assembly: ' + name + '("' + value + '")]', byline: true)
         }
-
     }
 }

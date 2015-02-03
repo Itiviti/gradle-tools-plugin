@@ -1,4 +1,4 @@
-# Gradle common scripts
+# Gradle tools plugins
 
 These plugins are meant at (further) simplifying project build files.
 Some may be useful to others, and some could deserve to be standard part of Gradle distribution.
@@ -45,24 +45,6 @@ Some functions that I find handy:
 
  - FileCollection getTools() : returns tools.jar path for current JDK
  - void replaceAssemblyAttribute(def file, String name, String value) : helper to replace Assembly attributes in C# AssemblyInfo.cs file
-    
-## optional plugin
-
-Allows to specify optional/packaged/internal dependencies in your build.
-Also removes test dependencies from your published pom.
-
-## plugin-base plugin
-
-Gradle plugin common plugin, with the following features:
- - appends '-SNAPSHOT' to the version unless '-Prelease'
- - '-Psnapshot' enables upload to maven central snapshot repository
- - '-Prelease' enables upload to maven central staging area
- - setup sources for gradle libs in generated eclipse project
- - artifacts setup with jar, groovydoc & sources (mandatory for maven central upload)
-    
-## plugin-base-ullink plugin
-
-Specific common build file for my gradle plugins (uses the above but also sets common POM info)
     
 # License
 

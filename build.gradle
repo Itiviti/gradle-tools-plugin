@@ -1,9 +1,38 @@
-apply plugin: 'plugin-base-ullink'
-
-buildscript {
-    dependencies {
-        classpath group: 'com.ullink.gradle', name: 'gradle-plugins', version: '1.0-SNAPSHOT'
-    }
+plugins {
+    id "nu.studer.plugindev" version "1.0.3"
 }
 
+apply plugin: 'groovy'
+
+group = 'com.ullink.gradle'
 version = '1.0'
+description 'gradle-opencover-plugin is a Gradle plugin for getting code coverage using OpenCover'
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
+
+bintray {
+    // to remove when upgraded plugindev to 1.0.4
+    user project.properties.bintrayUser
+    key project.properties.bintrayApiKey
+    pkg.repo = 'gradle-plugins'
+    pkg.version.gpg.sign = true
+    pkg.userOrg = 'ullink'
+}
+
+plugindev {
+    pluginId 'com.ullink.tools'
+    pluginName 'com.ullink.gradle:gradle-functions-plugin'
+    pluginImplementationClass 'com.ullink.gradle.FunctionsPlugin'
+    pluginDescription project.description
+    pluginLicenses 'Apache-2.0'
+    pluginTags 'gradle', 'plugin', 'tools'
+    authorId 'muryoh'
+    authorName 'Remy Masson'
+    authorEmail 'muryoh@gmail.com'
+    projectUrl "https://github.com/muryoh/${project.name}"
+    projectInceptionYear '2015'
+    done()
+}
