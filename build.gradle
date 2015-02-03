@@ -1,8 +1,10 @@
-plugins {
-    id "nu.studer.plugindev" version "1.0.3"
+buildscript {
+    dependencies {
+        classpath "nu.studer:gradle-plugindev-plugin:1.0.4.DEV"
+    }
 }
-
 apply plugin: 'groovy'
+apply plugin: 'nu.studer.plugindev'
 
 group = 'com.ullink.gradle'
 version = '1.0'
@@ -23,9 +25,7 @@ bintray {
 }
 
 plugindev {
-    pluginId 'com.ullink.tools'
     pluginName 'com.ullink.gradle:gradle-functions-plugin'
-    pluginImplementationClass 'com.ullink.gradle.FunctionsPlugin'
     pluginDescription project.description
     pluginLicenses 'Apache-2.0'
     pluginTags 'gradle', 'plugin', 'tools'
@@ -34,5 +34,14 @@ plugindev {
     authorEmail 'muryoh@gmail.com'
     projectUrl "https://github.com/muryoh/${project.name}"
     projectInceptionYear '2015'
+    pluginImplementation {
+        pluginId 'com.ullink.functions'
+        pluginImplementationClass 'com.ullink.gradle.FunctionsPlugin'
+    }
+    pluginImplementation {
+        pluginId 'com.ullink.task-rules'
+        pluginImplementationClass 'com.ullink.gradle.TaskRules'
+    }
+
     done()
 }
