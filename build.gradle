@@ -40,7 +40,7 @@ plugindev {
     }
     pluginImplementation {
         pluginId 'com.ullink.task-rules'
-        pluginImplementationClass 'com.ullink.gradle.TaskRules'
+        pluginImplementationClass 'com.ullink.gradle.TaskRulesPlugin'
     }
 
     done()
