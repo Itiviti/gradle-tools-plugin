@@ -57,27 +57,29 @@ class TaskRulesPlugin implements Plugin<Project> {
                 orig = '' + orig.charAt(0).toLowerCase() + orig.substring(1)
                 def task = project.tasks.findByName(orig)
 
-                Map<String, ?> props = project.getProperties()
-                task.metaClass.getProperties().each() {
-                    def value = props[it.name]
-                    if (value && !Project.class.metaClass.hasProperty(null, it.name)) {
-                        if (it.type == String.class || it.type == Boolean.class || it.type == boolean.class) {
-                            println "set ${it.name} = ${value}"
-                            it.setProperty(task, value)
+                if (task) {
+                    Map<String, ?> props = project.getProperties()
+                    task.metaClass.getProperties().each() {
+                        def value = props[it.name]
+                        if (value && !Project.class.metaClass.hasProperty(null, it.name)) {
+                            if (it.type == String.class || it.type == Boolean.class || it.type == boolean.class) {
+                                println "set ${it.name} = ${value}"
+                                it.setProperty(task, value)
+                            }
+                            // TODO support other types (numbers)
                         }
-                        // TODO support other types (numbers)
                     }
+                    Map args = [dependsOn: task]
+                    Task dummyTask = project.task(args, taskName)
+                    if (extra) {
+                        def script = 'return { ' + extra + ' }'
+                        def del = Eval.me(script)
+                        del.setResolveStrategy Closure.DELEGATE_FIRST
+                        del.delegate = task
+                        del()
+                    }
+                    dummyTask
                 }
-                Map args = [dependsOn: task]
-                Task dummyTask = project.task(args, taskName)
-                if (extra) {
-                    def script = 'return { ' + extra + ' }'
-                    def del = Eval.me(script)
-                    del.setResolveStrategy Closure.DELEGATE_FIRST
-                    del.delegate = task
-                    del()
-                }
-                dummyTask
             }
         }
     }

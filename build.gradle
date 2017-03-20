@@ -7,7 +7,7 @@ apply plugin: 'groovy'
 apply plugin: 'nu.studer.plugindev'
 
 group = 'com.ullink.gradle'
-version = '1.0'
+version = '1.1'
 description 'gradle-tools-plugin is a set of plugins that provide useful addition to Gradle'
 
 dependencies {
