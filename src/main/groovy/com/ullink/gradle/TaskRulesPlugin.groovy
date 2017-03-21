@@ -5,9 +5,13 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Rule
 import org.gradle.api.Task
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.wrapper.Wrapper
 
 class TaskRulesPlugin implements Plugin<Project> {
+    private Logger logger = Logging.getLogger(getClass())
+
     void apply(Project project) {
         // gradle "exec compileJava.classpath.files.each { println it }"
         // gradle -Ptype=Wrapper -PgradleVersion=1.3 exec
@@ -57,29 +61,32 @@ class TaskRulesPlugin implements Plugin<Project> {
                 orig = '' + orig.charAt(0).toLowerCase() + orig.substring(1)
                 def task = project.tasks.findByName(orig)
 
-                if (task) {
-                    Map<String, ?> props = project.getProperties()
-                    task.metaClass.getProperties().each() {
-                        def value = props[it.name]
-                        if (value && !Project.class.metaClass.hasProperty(null, it.name)) {
-                            if (it.type == String.class || it.type == Boolean.class || it.type == boolean.class) {
-                                println "set ${it.name} = ${value}"
-                                it.setProperty(task, value)
-                            }
-                            // TODO support other types (numbers)
-                        }
-                    }
-                    Map args = [dependsOn: task]
-                    Task dummyTask = project.task(args, taskName)
-                    if (extra) {
-                        def script = 'return { ' + extra + ' }'
-                        def del = Eval.me(script)
-                        del.setResolveStrategy Closure.DELEGATE_FIRST
-                        del.delegate = task
-                        del()
-                    }
-                    dummyTask
+                if (!task) {
+                    logger.debug("Skipping missing task '$orig' on project '$project.name'")
+                    return
                 }
+
+                Map<String, ?> props = project.getProperties()
+                task.metaClass.getProperties().each() {
+                    def value = props[it.name]
+                    if (value && !Project.class.metaClass.hasProperty(null, it.name)) {
+                        if (it.type == String.class || it.type == Boolean.class || it.type == boolean.class) {
+                            println "set ${it.name} = ${value}"
+                            it.setProperty(task, value)
+                        }
+                        // TODO support other types (numbers)
+                    }
+                }
+                Map args = [dependsOn: task]
+                Task dummyTask = project.task(args, taskName)
+                if (extra) {
+                    def script = 'return { ' + extra + ' }'
+                    def del = Eval.me(script)
+                    del.setResolveStrategy Closure.DELEGATE_FIRST
+                    del.delegate = task
+                    del()
+                }
+                dummyTask
             }
         }
     }
